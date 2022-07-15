@@ -10,4 +10,5 @@ public class RoschaJavaApplication {
 		SpringApplication.run(RoschaJavaApplication.class, args);
 	}
 
+
 }
