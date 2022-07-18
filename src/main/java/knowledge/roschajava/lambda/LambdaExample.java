@@ -1,5 +1,7 @@
 package knowledge.roschajava.lambda;
 
+import knowledge.roschajava.collections.Animal;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -7,10 +9,9 @@ public class LambdaExample {
 
 
     public static void main(String[] args) {
-
-
-
     }
+
+
 
     static void unaryBinaryOperatorsFIDemo() {
         UnaryOperator<String> upperCaseFunction = s -> s.toUpperCase(Locale.ROOT);
@@ -69,7 +70,7 @@ public class LambdaExample {
         map.forEach(biConsumer);
     }
 
-    static void supplierFIDemo(){
+    static void supplierFIDemo() {
         Supplier<String> stringSupplier = () -> "ID:" + Math.random();
         System.out.println(stringSupplier.get());
     }
