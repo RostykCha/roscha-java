@@ -3,24 +3,67 @@ package knowledge.roschajava.streams;
 import knowledge.roschajava.collections.Animal;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class StreamDemo {
 
     public static void main(String[] args) {
+    }
+
+    static void intStreamDemo() {
+        IntStream rangedIntStream = IntStream.range(1, 30); // from 1 to 29
+        IntStream rangedClosedIntStream = IntStream.rangeClosed(1, 30); // from 1 to 30
+
+        System.out.println(rangedIntStream.sum());
+
+        List<Integer> ageList = Animal.getAnimalList().stream().map(Animal::getAge).collect(Collectors.toList());
+
+        System.out.println("Average animal Age: " + ageList.stream().mapToInt(Integer::intValue).average().getAsDouble());
+        System.out.println("Oldest animal Age: " + ageList.stream().mapToInt(Integer::intValue).max().getAsInt());
+        System.out.println("Youngest animal Age: " + ageList.stream().mapToInt(Integer::intValue).min().getAsInt());
+
+        System.out.println(ageList.stream().max(Comparator.comparing(Integer::intValue)));
 
 
     }
 
-    static void matchStreamDemo(){
+    static void streamFactoryDemo() {
+        Stream<String> stringStream = Stream.of("A", "C", "B");
+        List<String> stringList = stringStream.collect(Collectors.toList());
+        System.out.println(stringList);
+
+        Stream<Integer> integerStream = Stream.iterate(1, x -> x + 1).limit(10);
+        integerStream.forEach(integer -> System.out.println(integer));
+
+        Supplier<Integer> integerSupplier = () -> new Random().nextInt();
+        Stream.generate(integerSupplier)
+            .limit(10)
+            .forEach(integer -> System.out.println(integer));
+    }
+
+    static void findStreamDemo() {
+        List<Animal> animalList = Animal.getAnimalList();
+
+        Animal elephant = animalList.stream()
+            .filter(animal -> animal.getName().equals("Elephant"))
+            .findFirst()
+            .get();
+
+        System.out.println(elephant);
+    }
+
+    static void matchStreamDemo() {
         List<String> stringList = List.of("A", "B", "C");
         System.out.println(stringList.stream().allMatch(a -> a.equals("A")));
         System.out.println(stringList.stream().anyMatch(a -> a.equals("A")));
         System.out.println(stringList.stream().noneMatch(a -> a.equals("X")));
     }
 
-    static void limitSkipStreamDemo(){
-        List<Integer> integerList = List.of(1,2,3,4,5,6,7,8,9);
+    static void limitSkipStreamDemo() {
+        List<Integer> integerList = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
         integerList.stream().skip(3).forEach(integer -> System.out.println("Skipped logic: " + integer)); // will skip first 3 elements and proceed with rest remaining
 
@@ -57,7 +100,7 @@ public class StreamDemo {
 
         animalList.stream()
             .map(animal -> animal.getAge())
-            .reduce(0, (x, y) -> x > y  ? x : y);
+            .reduce(0, (x, y) -> x > y ? x : y);
 
     }
 
@@ -110,7 +153,7 @@ public class StreamDemo {
         System.out.println(nameList);
     }
 
-    static void streamDemo()  {
+    static void streamDemo() {
         Map<String, Integer> map = Animal.getAnimalList().stream() //Stream<Student>
             .peek(animal -> System.out.println("FIRST PEEK " + animal))
             .filter(Animal::getDomestic) //Stream<Student> INTERMEDIATE

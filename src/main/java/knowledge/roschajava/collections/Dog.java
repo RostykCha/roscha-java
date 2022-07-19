@@ -6,4 +6,8 @@ public class Dog extends Animal{
         System.out.println("Barking!");
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

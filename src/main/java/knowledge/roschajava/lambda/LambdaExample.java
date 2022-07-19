@@ -11,7 +11,18 @@ public class LambdaExample {
     public static void main(String[] args) {
     }
 
+    static void comparatorFIDemo() {
+        List<Animal> animals = Animal.getAnimalList();
 
+        Comparator<Animal> animalAgeComparator = Comparator.comparing(Animal::getAge);
+        Comparator<Animal> nameAgeComparator = Comparator.comparing(Animal::getName);
+
+        animals.sort(animalAgeComparator);
+        System.out.println(animals);
+
+        animals.sort(nameAgeComparator);
+        System.out.println(animals);
+    }
 
     static void unaryBinaryOperatorsFIDemo() {
         UnaryOperator<String> upperCaseFunction = s -> s.toUpperCase(Locale.ROOT);
