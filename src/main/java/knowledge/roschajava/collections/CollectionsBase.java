@@ -5,8 +5,6 @@ import java.util.*;
 public class CollectionsBase {
 
     public static void main(String[] args) {
-        Map<Integer,String> map = new HashMap<>();
-        map.put(1, "A");
     }
 
     void queueMethods(){

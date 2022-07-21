@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class Animal implements Comparable<Animal>, Comparator<Animal> {
+public class Animal implements Comparable<Animal>, Comparator<Animal>, LivingCreature {
     private String name;
     private Integer eatPerDayKg;
     private Integer age;
@@ -13,7 +13,7 @@ public class Animal implements Comparable<Animal>, Comparator<Animal> {
     private List<String> nicknames;
 
     private static List<Animal> animalList = new ArrayList<>(Arrays.asList(
-        new Animal("Cow", 10, true, List.of("Mumu", "Woka", "Keli"), 20)
+        new Animal("Cow", 5, true, List.of("Mumu", "Woka", "Keli"), 20)
         , new Animal("Dog", 5, true, List.of("Petrushka", "Borka", "Archi"), 9)
         , new Animal("Wolf", 9, false, List.of("Akkela", "Humter", "Auf"), 12)
         , new Animal("Aligator", 9, false, List.of("Nil", "Brian", "Frank"), 30)
@@ -37,7 +37,13 @@ public class Animal implements Comparable<Animal>, Comparator<Animal> {
         return String.format("name: %s; age: %s; domestic: %s and eats: %s kilograms per day", name, age, isDomestic, eatPerDayKg);
     }
 
-    void eat() {
+
+    @Override
+    public void breathe() {
+        System.out.println("I am Breathing!");
+    }
+
+    public void eat() {
         System.out.println("Eating!");
     }
 

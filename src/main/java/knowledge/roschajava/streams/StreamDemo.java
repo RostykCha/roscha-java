@@ -1,9 +1,11 @@
 package knowledge.roschajava.streams;
 
 import knowledge.roschajava.collections.Animal;
+import knowledge.roschajava.collections.LivingCreature;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -11,11 +13,98 @@ import java.util.stream.Stream;
 public class StreamDemo {
 
     public static void main(String[] args) {
+        Animal animal = new Animal();
+        animal.getBirth();
+
+        LivingCreature animal2 = new Animal();
+    }
+
+    static void parallelStream() {
+        IntStream.rangeClosed(1, 10_000).sum();
+
+    }
+
+    static void partitionByStreamDemo() {
+        List<Animal> animalList = Animal.getAnimalList();
+        Map<Boolean, List<Animal>> partitionMap = animalList.stream()
+            .collect(Collectors.partitioningBy(animal -> animal.getAge() > 10));
+        System.out.println(partitionMap);
+    }
+
+    static void groupByStreamDemo() {
+        List<Animal> animalList = Animal.getAnimalList();
+
+        Map<String, List<Animal>> domesticMap = animalList.stream()
+            .collect(Collectors.groupingBy(animal -> animal.getDomestic() ? "Domestic" : "Wild"));
+        System.out.println(domesticMap);
+
+        System.out.println();
+
+        Map<String, List<Animal>> ageMap = animalList.stream()
+            .collect(Collectors.groupingBy(animal -> animal.getAge() > 10 ? "OLD" : "YOUNG"));
+        System.out.println(ageMap);
+
+        System.out.println();
+
+        Map<String, Map<String, List<Animal>>> map = animalList.stream()
+            .collect(Collectors.groupingBy(animal -> animal.getDomestic() ? "Domestic" : "Wild",
+                Collectors.groupingBy(animal -> animal.getAge() > 10 ? "Old" : "Young")));
+        System.out.println(map);
+
+        System.out.println();
+
+        Map<String, Map<String, Long>> map1 = animalList.stream()
+            .collect(Collectors.groupingBy(animal -> animal.getDomestic() ? "Domestic" : "Wild",
+                Collectors.groupingBy(animal -> animal.getAge() > 10 ? "Old" : "Young",
+                    Collectors.counting()
+                )));
+        System.out.println(map1);
+
+        System.out.println();
+
+        Map<String, Animal> oldest = animalList.stream()
+            .collect(Collectors.groupingBy(animal -> animal.getDomestic() ? "Domestic" : "Wild",
+                Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Animal::getAge)), Optional::get)
+            ));
+
+        System.out.println(oldest);
+    }
+
+    static void collectStreamDemo() {
+        List<Animal> animalList = Animal.getAnimalList();
+
+        //Joining
+        String allName = animalList.stream().map(Animal::getName)
+            .collect(Collectors.joining("; ", "(", ")"));
+        System.out.println(allName);
+
+        //Count
+        Long oldAnimals = animalList.stream().filter(animal -> animal.getAge() > 10).count();
+        System.out.println(oldAnimals);
+
+        //Mapping
+        List<String> nameList = animalList.stream()
+            .map(Animal::getName)
+            .collect(Collectors.toList());
+        System.out.println(nameList);
+
+        // Min/Max collector
+        Animal oldestAnimal = animalList.stream().max(Comparator.comparing(Animal::getAge)).get();
+        Animal youngestAnimal = animalList.stream().min(Comparator.comparing(Animal::getAge)).get();
+        System.out.println(oldestAnimal);
+        System.out.println(youngestAnimal);
+
     }
 
     static void intStreamDemo() {
         IntStream rangedIntStream = IntStream.range(1, 30); // from 1 to 29
         IntStream rangedClosedIntStream = IntStream.rangeClosed(1, 30); // from 1 to 30
+
+        List<Integer> boxingList = rangedClosedIntStream
+            //int
+            .boxed()
+            //Integer
+            .collect(Collectors.toList());
 
         System.out.println(rangedIntStream.sum());
 
@@ -27,7 +116,12 @@ public class StreamDemo {
 
         System.out.println(ageList.stream().max(Comparator.comparing(Integer::intValue)));
 
-
+        List<String> stringList = IntStream.rangeClosed(1, 10)
+            .mapToObj((i) -> {
+                return "ID:" + i;
+            })
+            .collect(Collectors.toList());
+        System.out.println(stringList);
     }
 
     static void streamFactoryDemo() {
