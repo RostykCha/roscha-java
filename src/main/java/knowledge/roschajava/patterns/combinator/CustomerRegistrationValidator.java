@@ -10,22 +10,32 @@ public interface CustomerRegistrationValidator
     extends Function<CustomerForCombinator, CustomerRegistrationValidator.ValidationResult> {
 
     static CustomerRegistrationValidator isEmailValid() {
-        return customer -> customer.getEmail().contains("@") ?
-            SUCCESS : EMAIL_NOT_VALID;
+        return customer -> {
+            System.out.println("isEmailValid lambda called");
+            return customer.getEmail().contains("@") ?
+                SUCCESS : EMAIL_NOT_VALID;
+        };
     }
 
     static CustomerRegistrationValidator isPhoneValid() {
-        return customer -> customer.getPhoneNumber().startsWith("+") ?
-            SUCCESS : PHONE_NOT_VALID;
+        return customer -> {
+            System.out.println("isPhoneValid lambda called");
+            return customer.getPhoneNumber().startsWith("+") ?
+                SUCCESS : PHONE_NOT_VALID;
+        };
     }
 
     static CustomerRegistrationValidator isAdult() {
-        return customer -> Period.between(customer.getDob(), LocalDate.now())
-            .getYears() > 18 ? SUCCESS : IS_NOT_ADULT;
+        return customer -> {
+            System.out.println("isAdult lambda called");
+            return Period.between(customer.getDob(), LocalDate.now())
+                .getYears() > 18 ? SUCCESS : IS_NOT_ADULT;
+        };
     }
 
     default CustomerRegistrationValidator and(CustomerRegistrationValidator other) {
         return customer -> {
+            System.out.println("and lambda called");
             ValidationResult result = this.apply(customer);
             return result.equals(SUCCESS) ? other.apply(customer) : result;
         };

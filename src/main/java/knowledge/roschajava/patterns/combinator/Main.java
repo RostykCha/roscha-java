@@ -13,14 +13,14 @@ public class Main {
             "380876453",
             LocalDate.of(1997, 10, 6));
 
-        //Without Combinator Pattern
-        CustomerPlaneValidationService validationService = new CustomerPlaneValidationService();
-        System.out.println(validationService.isValid(customer));
+//        //Without Combinator Pattern
+//        CustomerPlaneValidationService validationService = new CustomerPlaneValidationService();
+//        System.out.println(validationService.isValid(customer));
 
         //Using Combinator Pattern
-        CustomerRegistrationValidator.ValidationResult result = CustomerRegistrationValidator.isEmailValid()
-            .and(isPhoneValid())
-            .and(isAdult())
+        CustomerRegistrationValidator.ValidationResult result = CustomerRegistrationValidator.isEmailValid() // isEmailValid() lambda
+            .and(isPhoneValid()) //  isEmailValid() lambda = true ? isPhoneValid() :  isEmailValid()
+            .and(isAdult()) //  isEmailValid() lambda = true ? isAdult() :  isEmailValid()
             .apply(customer);
         System.out.println(result);
     }
